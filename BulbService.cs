@@ -38,6 +38,14 @@ public class BulbService
         {
             return;
         }
+
+        var time = DateTime.UtcNow;
+
+        if (time.Hour is > 7 and < 16)
+        {
+            Console.WriteLine("Invalid time");
+            return;
+        }
         
         Console.WriteLine($"Toggling bulb to {(power ? "On" : "Off")}");
         await bulb.SetPower(power);

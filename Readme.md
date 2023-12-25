@@ -1,1 +1,1 @@
-Small home automation utility for turning on YeeLight on motion detection
+Small home automation utility for turning on YeeLight on motion detection on a raspberry pi motion sensor
