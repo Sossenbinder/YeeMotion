@@ -1,0 +1,1 @@
+Small home automation utility for turning on YeeLight on motion detection
