@@ -48,7 +48,14 @@ public class BulbService
         }
         
         Console.WriteLine($"Toggling bulb to {(power ? "On" : "Off")}");
-        await bulb.SetPower(power);
+        try
+        {
+            await bulb.SetPower(power);
+        }
+        catch (Exception exc)
+        {
+            Console.WriteLine($"Failed to toggle bulb to {(power ? "On" : "Off")}");
+        }
     }
 
     private void HandleBulbNotification(NotificationReceivedEventArgs args)
