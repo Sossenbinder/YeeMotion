@@ -1,0 +1,10 @@
+bin/
+obj/
+.vs/
+.idea/
+*.user
+*.suo
+*.sln
+*.slnx
+*.DotSettings*
+Properties/

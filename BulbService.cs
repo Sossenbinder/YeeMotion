@@ -24,7 +24,7 @@ public class BulbService
             await device.Connect();
  
             device.OnNotificationReceived += (_, args) => HandleBulbNotification(args);
-            bulbStateTracker.UpdateBulbPower((string) device.Properties["power"] == "on");
+            bulbStateTracker.UpdateBulbPower(device.Properties.TryGetValue("power", out var power) && (string) power == "on");
             
             return device;
         });
@@ -41,7 +41,7 @@ public class BulbService
 
         var time = DateTime.UtcNow;
 
-        if (time.Hour is > 7 and < 16)
+        if (power && time.Hour is >= 7 and < 17)
         {
             Console.WriteLine("Invalid time");
             return;
@@ -54,6 +54,8 @@ public class BulbService
         }
         catch (Exception exc)
         {
+            await bulb.Connect();
+            Console.WriteLine(exc.Message);
             Console.WriteLine($"Failed to toggle bulb to {(power ? "On" : "Off")}");
         }
     }
