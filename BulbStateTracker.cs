@@ -17,15 +17,15 @@ public class BulbStateTracker
 
     public async ValueTask NotifyMovement()
     {
-        var tmpLastMovement = _lastMovement;
+        var hadMovement = _lastMovement.HasValue;
         _lastMovement = DateTime.UtcNow;
 
-        if (tmpLastMovement == _lastMovement)
+        if (hadMovement)
         {
             return;
         }
-        
-        // Movement changed, turn on
+
+        // First movement after idle, turn on
         Console.WriteLine($"{DateTime.UtcNow}: Movement detected, turning on");
         await OnBulbStateChange.Publish(true);
     }

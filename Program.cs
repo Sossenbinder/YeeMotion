@@ -37,7 +37,7 @@ Console.WriteLine($"YeeMotion started - GPIO pin: {pin}, Bulb: {bulbAddress}");
 
 try
 {
-    gpioController.RegisterCallbackForPinValueChangedEvent(pin, PinEventTypes.Rising | PinEventTypes.Falling, async (_, eArgs) =>
+    gpioController.RegisterCallbackForPinValueChangedEvent(pin, PinEventTypes.Rising, async (_, eArgs) =>
     {
         await bulbStateTracker.NotifyMovement();
     });
