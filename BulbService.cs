@@ -7,15 +7,18 @@ namespace YeeMotion;
 public class BulbService
 {
     private readonly BulbStateTracker _bulbStateTracker;
+    private readonly SunlightService _sunlightService;
 
     private readonly string _bulbAddress;
     private Device? _device;
 
     public BulbService(
         IConfiguration config,
-        BulbStateTracker bulbStateTracker)
+        BulbStateTracker bulbStateTracker,
+        SunlightService sunlightService)
     {
         _bulbStateTracker = bulbStateTracker;
+        _sunlightService = sunlightService;
         _bulbAddress = config[Config.BulbAddress]!;
         bulbStateTracker.OnBulbStateChange.Register(ToggleBulb);
     }
@@ -42,11 +45,9 @@ public class BulbService
             return;
         }
 
-        var time = DateTime.UtcNow;
-
-        if (power && time.Hour is >= 7 and < 17)
+        if (power && await _sunlightService.IsDaylight())
         {
-            Console.WriteLine("Invalid time");
+            Console.WriteLine("Skipping, currently daylight");
             return;
         }
 

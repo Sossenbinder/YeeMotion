@@ -13,6 +13,9 @@ var bulbAddress = args.Length > 1
     ? args[1]
     : Environment.GetEnvironmentVariable("BULB_ADDRESS") ?? throw new InvalidOperationException("BULB_ADDRESS not set");
 
+var lat = Environment.GetEnvironmentVariable("LATITUDE") ?? "48.7758";
+var lng = Environment.GetEnvironmentVariable("LONGITUDE") ?? "9.1829";
+
 var config = new ConfigurationBuilder()
     .AddInMemoryCollection(new Dictionary<string, string?>()
     {
@@ -23,6 +26,7 @@ var config = new ConfigurationBuilder()
 var services = new ServiceCollection()
     .AddSingleton<BulbService>()
     .AddSingleton<BulbStateTracker>()
+    .AddSingleton(new SunlightService(lat, lng))
     .AddSingleton<IConfiguration>(config)
     .BuildServiceProvider();
 
@@ -33,7 +37,7 @@ gpioController.OpenPin(pin, PinMode.InputPullDown);
 var bulbStateTracker = services.GetRequiredService<BulbStateTracker>();
 _ = services.GetRequiredService<BulbService>();
 
-Console.WriteLine($"YeeMotion started - GPIO pin: {pin}, Bulb: {bulbAddress}");
+Console.WriteLine($"YeeMotion started - GPIO pin: {pin}, Bulb: {bulbAddress}, Location: {lat},{lng}");
 
 try
 {
